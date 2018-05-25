@@ -1,6 +1,8 @@
-requires 'perl', '5.008001';
+requires 'perl', '5.010001';
+requires 'Test2::Suite', '0.000114';
+requires 'Path::Tiny', '0.104';
 
 on 'test' => sub {
-    requires 'Test::More', '0.98';
+    requires 'Test::Simple', '1.302136';
 };
 
