@@ -1,0 +1,4 @@
+name = "Test2-Plugin-Name-FromLine"
+# badges = ["travis"]
+module_maker="ModuleBuildTiny"
+
