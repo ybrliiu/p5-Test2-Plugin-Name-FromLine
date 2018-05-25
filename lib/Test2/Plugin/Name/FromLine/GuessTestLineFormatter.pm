@@ -59,7 +59,7 @@ sub guess_test_line {
     $tmp_line;
   } else {
     if ($self->line_num > 0) {
-      $self->{line_num} -= 1;
+      $self->line_num( $self->line_num - 1 );
       $self->guess_test_line;
     } else {
       warn "Cannot find test line.";

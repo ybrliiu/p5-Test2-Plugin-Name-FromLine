@@ -5,11 +5,13 @@ use warnings;
 use utf8;
 use 5.010001;
 use feature ':5.10';
+use Carp ();
 
 use parent qw( Test2::Formatter::TAP );
 use Class::Accessor::Lite (
   new => 0,
-  ro  => [qw( work_dir file_name file_path file_data line line_num )],
+  ro  => [qw( work_dir file_name file_path file_data line )],
+  rw  => [qw( line_num )],
 );
 
 use Cwd qw( getcwd );
@@ -23,8 +25,8 @@ sub new {
   my $self = $class->SUPER::new(@_);
   my $args = ref $_[0] eq 'HASH' ? $_[0] : +{@_};
   $self->{work_dir}  = $args->{work_dir}  // $WORK_DIR;
-  $self->{file_name} = $args->{file_name} // die "${class} required attribute file_name.";
-  $self->{line_num}  = $args->{line_num}  // die "${class} required attribute line_num.";
+  $self->{file_name} = $args->{file_name} // Carp::croak "${class} required attribute file_name.";
+  $self->{line_num}  = $args->{line_num}  // Carp::croak "${class} required attribute line_num.";
   $self->{file_path} = $args->{file_path} // $self->work_dir . '/' . $self->file_name;
   $self->{file_data} = $args->{file_data} //
     ( $File_cache{$self->file_name} //= [ split /\n/, path($self->file_path)->slurp ] );
