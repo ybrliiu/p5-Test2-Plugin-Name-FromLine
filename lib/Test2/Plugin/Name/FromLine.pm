@@ -12,7 +12,8 @@ our $VERSION = '0.01_1';
 sub import {
   my ($class, %args) = (shift, @_);
 
-  # 警告抑止 : use だと loaded too late to be used as the global formatter と警告が出る
+  # loads these modules for use as global formatter.
+  # (if loads these modules by use function, A warning occurr.)
   require Test2::Plugin::Name::FromLine::Formatter;
   require Test2::Plugin::Name::FromLine::GuessTestLineFormatter;
 

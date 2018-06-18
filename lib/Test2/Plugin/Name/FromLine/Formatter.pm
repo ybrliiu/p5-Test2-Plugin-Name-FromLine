@@ -23,8 +23,8 @@ sub new {
   my $self = $class->SUPER::new(@_);
   my $args = ref $_[0] eq 'HASH' ? $_[0] : +{@_};
   $self->{+WORK_DIR}  = $args->{work_dir}  // $WORK_DIR;
-  $self->{+FILE_NAME} = $args->{file_name} // Carp::croak "${class} required attribute file_name.";
-  $self->{+LINE_NUM}  = $args->{line_num}  // Carp::croak "${class} required attribute line_num.";
+  $self->{+FILE_NAME} = $args->{file_name} // Carp::croak q{Attribute 'file_name' required.};
+  $self->{+LINE_NUM}  = $args->{line_num}  // Carp::croak q{Attribute 'line_num' required.};
   $self->{+FILE_PATH} = $args->{file_path} // $self->work_dir . '/' . $self->file_name;
   $self->{+FILE_DATA} = $args->{file_data} //
     ( $File_cache{$self->file_name} //= [ split /\n/, Path::Tiny::path($self->file_path)->slurp ] );
@@ -34,9 +34,7 @@ sub new {
 sub print_optimal_pass {
   my ($self, $e, $num, $f) = @_;
   if ( $e->isa('Test2::Event::Ok') ) {
-    unless ($e->name) {
-      $e->set_name("L@{[ $self->line_num ]}: @{[ $self->line ]}");
-    }
+    $e->set_name("L@{[ $self->line_num ]}: @{[ $self->line ]}") unless $e->name;
   }
   $self->SUPER::print_optimal_pass($e, $num, $f);
 }

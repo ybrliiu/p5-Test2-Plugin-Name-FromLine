@@ -31,8 +31,8 @@ use constant DEFAULT_TEST_KEYWORDS => do {
 
   # add fuzzy strings
   my @fuzzy_strings = (
-    ( map { "$_ " }     @fuzzy_functions ),
-    ( map { $_ . '\(' } @fuzzy_functions ),
+    ( map { "$_ " } @fuzzy_functions ),
+    ( map { quotemeta "$_(" } @fuzzy_functions ),
   );
   @table{@fuzzy_strings} = (1) x @fuzzy_strings;
 
@@ -41,8 +41,8 @@ use constant DEFAULT_TEST_KEYWORDS => do {
 
 sub new {
   my $class = shift;
-  my $self = $class->SUPER::new(@_);
-  my $args = ref $_[0] eq 'HASH' ? $_[0] : +{@_};
+  my $self  = $class->SUPER::new(@_);
+  my $args  = ref $_[0] eq 'HASH' ? $_[0] : +{@_};
   $self->{+TEST_KEYWORDS} = [ @{ $args->{test_keywords} // [] }, @{ +DEFAULT_TEST_KEYWORDS } ];
   $self->{+ORIG_LINE_NUM} = $self->line_num;
   $self->{+LINE}          = $self->guess_test_line;
@@ -59,7 +59,7 @@ sub guess_test_line {
       $self->set_line_num( $self->line_num - 1 );
       $self->guess_test_line;
     } else {
-      warn "Cannot find test line.";
+      warn "Cannot find the line from test file.";
       $self->orig_line_num;
     }
   }
