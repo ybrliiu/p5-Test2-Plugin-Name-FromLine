@@ -14,5 +14,6 @@ ok 1 + 2;
 ok (
   10 + 20
 );
+ok(1);
 
 done_testing;
