@@ -18,25 +18,34 @@ use Test2::Util::HashBase qw(
 my $WORK_DIR = Cwd::getcwd();
 my %File_cache = ();
 
-sub new {
-  my $class = shift;
-  my $self = $class->SUPER::new(@_);
-  my $args = ref $_[0] eq 'HASH' ? $_[0] : +{@_};
-  $self->{+WORK_DIR}  = $args->{work_dir}  // $WORK_DIR;
-  $self->{+FILE_NAME} = $args->{file_name} // Carp::croak q{Attribute 'file_name' required.};
-  $self->{+LINE_NUM}  = $args->{line_num}  // Carp::croak q{Attribute 'line_num' required.};
-  $self->{+FILE_PATH} = $args->{file_path} // $self->work_dir . '/' . $self->file_name;
-  $self->{+FILE_DATA} = $args->{file_data} //
+sub init {
+  my $self = shift;
+  $self->{+FILE_NAME} // Carp::croak q{Attribute 'file_name' required.};
+  $self->{+WORK_DIR}  //= $WORK_DIR;
+  $self->{+FILE_PATH} //= $self->work_dir . '/' . $self->file_name;
+  $self->{+FILE_DATA} //= 
     ( $File_cache{$self->file_name} //= [ split /\n/, Path::Tiny::path($self->file_path)->slurp ] );
-  $self;
+  $self->SUPER::init();
 }
 
-sub print_optimal_pass {
+sub new_root {
+  my $class = shift;
+  ref $class ? $class : $class->SUPER::new_root(@_);
+}
+
+sub write {
   my ($self, $e, $num, $f) = @_;
   if ( $e->isa('Test2::Event::Ok') ) {
-    $e->set_name("L@{[ $self->line_num ]}: @{[ $self->line ]}") unless $e->name;
+    my $line_num = $e->trace->frame->[2];
+    my $name = "L${line_num}: " . ( $e->name // $self->file_data->[ $line_num - 1 ] );
+    $e->set_name($name);
+    if ( ref $f eq 'HASH' ) {
+      $f->{assert}->{details} = $name;
+    }
+    # my $details = $e->facet_data->{assert}->{details};
+    # warn $details;
   }
-  $self->SUPER::print_optimal_pass($e, $num, $f);
+  $self->SUPER::write($e, $num, $f);
 }
 
 1;

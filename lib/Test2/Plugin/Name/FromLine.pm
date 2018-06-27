@@ -5,39 +5,20 @@ use warnings;
 use utf8;
 use 5.010001;
 use feature ':5.10';
-use Test2::API qw( test2_add_callback_context_init );
+use Test2::API qw( test2_formatter_set test2_add_callback_context_init test2_add_callback_context_release );
+use Test2::Plugin::Name::FromLine::Formatter;
+# use Test2::Plugin::Name::FromLine::GuessTestLineFormatter;
 
 our $VERSION = '0.01_1';
 
 sub import {
   my ($class, %args) = (shift, @_);
 
-  # loads these modules for use as global formatter.
-  # (if loads these modules by use function, A warning occurr.)
-  require Test2::Plugin::Name::FromLine::Formatter;
-  require Test2::Plugin::Name::FromLine::GuessTestLineFormatter;
-
   my $formatter_class = 'Test2::Plugin::Name::FromLine::'
     . ( $args{does_guess_test_line} ? 'GuessTestLineFormatter' : 'Formatter' );
-  test2_add_callback_context_init(sub {
-    my $ctx = shift;
-    callback($ctx, $formatter_class, \%args);
-  });
-}
-
-sub callback {
-  my ($ctx, $formatter_class, $args) = @_;
-  my $frame = $ctx->trace->frame;
-  # just call from test file.
-  if ($frame->[0] eq 'main') {
-    $ctx->hub->format(
-        $formatter_class->new({
-        line_num  => $frame->[2],
-        file_name => $frame->[1],
-        %$args,
-      })
-    );
-  }
+  my $file_name = (caller)[1];
+  my $formatter = $formatter_class->new(file_name => $file_name);
+  test2_formatter_set($formatter);
 }
 
 1;
