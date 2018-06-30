@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Auto fill test names",
    "author" : [
-      "mp0liiu <raian@reeshome.org>"
+      "mp0liiu <mp0liiu@gmail.com<gt>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.0.16, CPAN::Meta::Converter version 2.150010",
@@ -42,16 +42,38 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008001"
+            "Path::Tiny" : "0",
+            "Test2::API" : "0",
+            "Test2::Formatter::TAP" : "0",
+            "Test2::Util::HashBase" : "0",
+            "feature" : "0",
+            "parent" : "0",
+            "perl" : "5.014004"
          }
       },
       "test" : {
          "requires" : {
-            "Test::More" : "0.98"
+            "Test2::Bundle::More" : "0",
+            "Test2::Tools::Exception" : "0",
+            "Test::More" : "0"
          }
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ybrliiu/p5-Test2-Plugin-Name-FromLine/issues"
+      },
+      "homepage" : "https://github.com/ybrliiu/p5-Test2-Plugin-Name-FromLine",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ybrliiu/p5-Test2-Plugin-Name-FromLine.git",
+         "web" : "https://github.com/ybrliiu/p5-Test2-Plugin-Name-FromLine"
+      }
+   },
+   "version" : "0.01_1",
+   "x_contributors" : [
+      "mp0liiu <raian@reeshome.org>"
+   ],
    "x_serialization_backend" : "JSON::PP version 2.27400_02"
 }
