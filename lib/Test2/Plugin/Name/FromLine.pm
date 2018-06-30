@@ -3,8 +3,8 @@ package Test2::Plugin::Name::FromLine;
 use strict;
 use warnings;
 use utf8;
-use 5.010001;
-use feature ':5.10';
+use 5.014004;
+use feature ':5.14';
 use Test2::API qw( test2_formatter_set );
 use Test2::Plugin::Name::FromLine::Formatter;
 
