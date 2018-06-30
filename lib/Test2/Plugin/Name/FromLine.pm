@@ -5,19 +5,16 @@ use warnings;
 use utf8;
 use 5.010001;
 use feature ':5.10';
-use Test2::API qw( test2_formatter_set test2_add_callback_context_init test2_add_callback_context_release );
+use Test2::API qw( test2_formatter_set );
 use Test2::Plugin::Name::FromLine::Formatter;
-# use Test2::Plugin::Name::FromLine::GuessTestLineFormatter;
 
 our $VERSION = '0.01_1';
 
 sub import {
   my ($class, %args) = (shift, @_);
 
-  my $formatter_class = 'Test2::Plugin::Name::FromLine::'
-    . ( $args{does_guess_test_line} ? 'GuessTestLineFormatter' : 'Formatter' );
   my $file_name = (caller)[1];
-  my $formatter = $formatter_class->new(file_name => $file_name);
+  my $formatter = Test2::Plugin::Name::FromLine::Formatter->new(file_name => $file_name);
   test2_formatter_set($formatter);
 }
 
