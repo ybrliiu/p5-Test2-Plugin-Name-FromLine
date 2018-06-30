@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use v5.14;
-use Data::Dumper;
 use Test2::API qw( context intercept test2_stack );
 use Test2::Bundle::More;
 use Test2::Plugin::Name::FromLine;
@@ -57,5 +56,11 @@ is $output->{stderr}, trim(q{
 # | 1   | eq | 0     |
 # +-----+----+-------+
 }), 'is 1, 0 => not ok';
+
+is test_test {
+  ok 1, 'some test';
+}->{stdout}, trim(q{
+ok 4 - L61: some test
+}), 'has name';
 
 done_testing;
