@@ -39,11 +39,11 @@ sub write {
     my $line_num = $e->trace->frame->[2];
     my $name = "L${line_num}: " . ( $e->name // $self->file_data->[ $line_num - 1 ] );
     $e->set_name($name);
+    # for failed case
+    # see also Test2::Formatter::TAP->assert_tap
     if ( ref $f eq 'HASH' ) {
       $f->{assert}->{details} = $name;
     }
-    # my $details = $e->facet_data->{assert}->{details};
-    # warn $details;
   }
   $self->SUPER::write($e, $num, $f);
 }
